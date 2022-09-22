@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI kalkulátor</title>
+</head>
+
+    <style>
+
+        body{
+            background-color: aqua;
+        }
+
+        .container{
+            text-align: center;
+            margin: auto;
+            width: 300px;
+            background-color: white;
+            
+        }
+        h2{
+            background-color: lightskyblue;
+        }
+        #keret{
+            background-color: bisque;
+            width: 150px;
+            text-align: center;
+            margin: auto;
+            border: solid 1px aqua;
+            margin-bottom: 10px;
+            box-shadow: 2px 5px lightgray;
+        }
+       /* #kg{
+            margin-bottom: 10px;
+            border-radius: 5px;
+            width: 127px;
+            box-shadow: 2px 5px lightgray;
+        
+        }
+        #cm{
+            margin-bottom: 10px;
+            border-radius: 5px;
+            box-shadow: 2px 5px lightgray;
+            width: 127px;
+        }   */
+        #button{
+            margin-bottom: 20px;
+            width: 200px;
+            background-color: aqua;
+            
+        }
+     
+        .range-warp{
+            position: relative;
+            margin: 0 auto 3rem;
+        }
+        .range{
+            width: 200px;
+            cursor: pointer;
+        }
+        .bubble{
+            background-color: darkblue;
+            color: white;
+            padding: 4px 12px;
+            position: absolute;
+            border-radius: 2px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: end;
+        }
+        .bubble::after {
+            content: "";
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: darkblue;
+            top: -1px;
+            left: 50%;
+}
+    span{
+        display: flex;
+        justify-content: start;
+        margin-left: 50px;
+    }
+
+
+    </style>
+
+<body>
+    
+    <div class="container">
+            <h2>BMI kalkulátor</h2>
+           
+            <div id="keret">
+                <div id="bmiszam">20.0</div>
+                <p id="szov">Nomrál testsúly</p>
+            </div>
+
+            <span>Testtömeg kg</span>
+        <div class="range-warp" style="widht = 75%">
+            <input type="range" class="range" name="suly" id="kg" min="10" max="200"> 
+            <output class="bubble"></output>
+        </div>
+            
+            <span>Magasság cm</span>
+        <div class="range-warp">
+            <input type="range" class="range" name="magassag" id="cm" min="10" max="220"> 
+            <output class="bubble"></output>
+        </div>
+            
+        
+            <input type="button" value="Számol" id="button" onclick="szamol()">
+
+            <script>
+
+                const allRanges = document.querySelectorAll(".range-warp");
+                allRanges.forEach(warp => {
+                    const range = warp.querySelector(".range");
+                    const bubi = warp.querySelector(".bubble");
+
+                    range.addEventListener("input", () => { setBubble(range, bubi);
+                    });
+                    setBubble(range, bubi);
+                }); 
+
+                function setBubble(range, bubi){
+                    const val = range.value;
+                    const min = range.min ? range.min : 0;
+                    const max = range.max ? range.max : 100;
+                
+                    const newVal = Number(((val - min) * 100) / (max -min));
+                    bubi.innerHTML = val;
+                    
+                    bubi.style.left = `calc(${newVal}% + (${8 - newVal * 0.15}px))`;
+                }
+
+                function szamol(){
+
+                let suly = document.querySelector('#kg').value
+                let mag = document.querySelector('#cm').value
+                let BMI = (suly / (mag*mag)) * 10000
+                
+                console.log(suly)
+                console.log(mag)
+                console.log(BMI)
+
+                if(BMI <= 18.5){
+                    document.querySelector('#bmiszam').innerHTML = BMI.toFixed(1)
+                    document.querySelector('#szov').innerHTML = "Sovány! 💀"
+                }
+                else if(BMI > 18.5 && BMI <= 24.9){
+                    document.querySelector('#bmiszam').innerHTML = BMI.toFixed(1)
+                    document.querySelector('#szov').innerHTML = "Normál testsúly! 🥰"
+                }
+                else if(BMI > 25 && BMI <= 29.9){
+                    document.querySelector('#bmiszam').innerHTML = BMI.toFixed(1)
+                    document.querySelector('#szov').innerHTML = "Kicsit elhízott 🐔"
+                }
+                else if(BMI > 30 && BMI <= 34.9){
+                    document.querySelector('#bmiszam').innerHTML = BMI.toFixed(1)
+                    document.querySelector('#szov').innerHTML = "Elhízott 🐽"
+                }
+                else if(BMI >= 35){
+                    document.querySelector('#bmiszam').innerHTML = BMI.toFixed(1)
+                    document.querySelector('#szov').innerHTML = "Túlsúlyos 🐷"
+                }
+                
+            }
+
+            </script>
+
+    </div>
+
+</body>
+</html>
