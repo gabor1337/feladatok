@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+    <title>Our tour</title>
+</head>
+<style>
+    b{
+        cursor: pointer;
+        transition: transform 250ms, opacity 400ms;
+        color:  blue;
+    }
+    b:hover{
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+</style>
+<body>
+    <div class="container bg-light shadow text-center">
+        <h1>Our tour</h1>
+        <div class="card-group"></div>
+
+        <div class="modal" tabindex="-1">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title"></h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <p id="str"></p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+    </div>
+
+
+
+    <script>
+        const tourUrl = "https://course-api.com/react-tours-project"
+
+        const getData = async (url) => {
+            const response = await fetch(url)
+            const data = await response.json()
+            console.log(data)
+            render(data)
+        }
+
+        function render(data){
+            for(let obj of data){
+                document.querySelector('.card-group').innerHTML += myCard(obj.image,obj.name,obj.info,obj.price)
+            }
+        }
+
+        getData(tourUrl)
+
+        function myCard(image,name,info,price){
+            let partInfo = info.slice(0,50)
+            let lastSpaceIndex = partInfo.lastIndexOf(' ')
+            partInfo = partInfo.slice(0, lastSpaceIndex)
+            return `
+            <div class="card">
+                <img src="${image}" class="card-img-top" alt="...">
+            <div class="card-body">
+                <h5 class="card-title">${name}</h5>
+                <p class="card-text">${partInfo} <br><b data-info="${info}" onclick="detail(this)">read more</b></p>
+                <p class="card-text">Pirce: $ ${price}</p>
+            </div>
+            `
+        }
+        function detail(obj){
+            console.log(obj.dataset.info)
+            document.querySelector('.modal-title').innerHTML = obj.name
+            document.queryCommandIndeterm('#str').innerHTML = obj.dataset.info
+        
+        }
+       
+    </script>
+
+</body>
+</html>
